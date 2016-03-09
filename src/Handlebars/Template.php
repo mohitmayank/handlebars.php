@@ -505,7 +505,14 @@ class Template
      */
     private function _partial(Context $context, $current)
     {
-        $partial = $this->handlebars->loadPartial($current[Tokenizer::NAME]);
+        //Tmp jugad fix, until bug is fixed in upstream. 
+        try{
+		    $_name = $context->get($current[Tokenizer::NAME]);
+		} catch (\InvalidArgumentException $e) {
+		    $_name = $current[Tokenizer::NAME];
+	    }
+        $partial = $this->handlebars->loadPartial($_name);
+        //$partial = $this->handlebars->loadPartial($current[Tokenizer::NAME]);
 
         if ($current[Tokenizer::ARGS]) {
             $arguments = new Arguments($current[Tokenizer::ARGS]);
